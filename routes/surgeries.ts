@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+import { surgeriesController } from "../controllers/surgeriesController";
+import { Router } from "express";
+
+const router = Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', surgeriesController.getSurgeries);
 
-module.exports = router;
+export { router };

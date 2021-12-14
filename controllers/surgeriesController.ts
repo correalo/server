@@ -1,20 +1,11 @@
 import { createConnection } from "typeorm";
 import { Surgery } from "../entity/Surgery";
+import { Request, Response, NextFunction } from 'express';
 
-const surgeriesController = {
-  async getSurgery(req, res, next) {
-    let { body } = req;
+export const surgeriesController = {
+  async getSurgeries(req: Request, res: Response, next: NextFunction) {
     const connection = await createConnection();
-    const surgery = new Surgery(
-      body.nome,
-      body.data_de_cirurgia,
-      body.tipo_de_cirurgia,
-      body.convenio,
-      body.valor,
-      body.recebido_por,
-      body.pago
-    );
-    await connection.manager.save(surgery);
-    res.json(surgery);
+    const surgeries = await connection.manager.find(Surgery);
+    res.json(surgeries);
   },
 };
