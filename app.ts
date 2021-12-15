@@ -1,16 +1,14 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
+import express from "express"
+import path from "path"
+import cookieParser from "cookie-parser" 
 import "reflect-metadata";
+import { surgeriesRouter } from "./routes/surgeries";
+import { indexRouter } from "./routes/index";
+import logger from "morgan"
 import { createConnection } from "typeorm";
-import { Surgery } from "./entity/Surgery";
 
-var logger = require("morgan");
-
-var indexRouter = require("./routes/index");
-var surgeriesRouter = require("./routes/surgeries");
-
-var app = express();
+createConnection().then(__conn => {
+const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -21,28 +19,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/surgeries", surgeriesRouter);
 
-createConnection()
-  .then(async (connection) => {
-    console.log("Inserting a new surgery into the database...");
-    const surgery = new Surgery(
-      "Jose",
-      new Date(),
-      "ccc",
-      "amil",
-      111.11,
-      "hospital",
-      true
-    );
+  // start express server
+  app.listen(3000);
+})
+.catch(error =>{
+  console.error("Error connecting to database", error)
+});
 
-    await connection.manager.save(surgery);
-    console.log("Saved a new surgery with id: " + surgery.id);
-
-    console.log("Loading surgerys from the database...");
-    const surgeries = await connection.manager.find(Surgery);
-    console.log("Loaded surgerys: ", surgeries);
-
-    console.log("Here you can setup and run express/koa/any other framework.");
-  })
-  .catch((error) => console.log(error));
-
-module.exports = app;

@@ -6,4 +6,4 @@ const router = Router();
 /* GET users listing. */
 router.get('/', surgeriesController.getSurgeries);
 
-export { router };
+export { router as surgeriesRouter };

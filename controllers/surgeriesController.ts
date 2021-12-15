@@ -1,11 +1,11 @@
-import { createConnection } from "typeorm";
+import { getRepository } from "typeorm";
 import { Surgery } from "../entity/Surgery";
 import { Request, Response, NextFunction } from 'express';
-
+import {  } from '../app'
 export const surgeriesController = {
   async getSurgeries(req: Request, res: Response, next: NextFunction) {
-    const connection = await createConnection();
-    const surgeries = await connection.manager.find(Surgery);
+  
+    const surgeries = await getRepository(Surgery).find();
     res.json(surgeries);
   },
 };
